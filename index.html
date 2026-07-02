@@ -815,8 +815,8 @@ headers.forEach(h => {
   th.style.cursor = "pointer";
 
   th.addEventListener("click", () => {
-    sortTableByColumn(h);
-  });
+  sortTableByColumn(h, data);
+});
 
   tr.appendChild(th);
 });
@@ -1076,6 +1076,29 @@ document.getElementById("placementPercent").innerText=
 percent+"%";
 
 }
+function sortTableByColumn(column, dataToSort) {
+
+  sortDirection[column] = !sortDirection[column];
+  let direction = sortDirection[column] ? 1 : -1;
+
+  let sorted = [...dataToSort].sort((a, b) => {
+
+    let valA = a[column] || "";
+    let valB = b[column] || "";
+
+    let numA = parseFloat(valA.toString().replace(/[^\d.]/g, ""));
+    let numB = parseFloat(valB.toString().replace(/[^\d.]/g, ""));
+
+    if (!isNaN(numA) && !isNaN(numB)) {
+      return (numA - numB) * direction;
+    }
+
+    return valA.toString().localeCompare(valB.toString()) * direction;
+  });
+
+  buildTable(sorted);
+  updateStats(sorted);
+}
 /* FILTER */
 
 function applyFilters(){
@@ -1115,29 +1138,7 @@ campusValue = row[key] || "";
 }
 
 });
-function sortTableByColumn(column, dataToSort) {
 
-  sortDirection[column] = !sortDirection[column];
-  let direction = sortDirection[column] ? 1 : -1;
-
-  let sorted = [...dataToSort].sort((a, b) => {
-
-    let valA = a[column] || "";
-    let valB = b[column] || "";
-
-    let numA = parseFloat(valA.toString().replace(/[^\d.]/g, ""));
-    let numB = parseFloat(valB.toString().replace(/[^\d.]/g, ""));
-
-    if (!isNaN(numA) && !isNaN(numB)) {
-      return (numA - numB) * direction;
-    }
-
-    return valA.toString().localeCompare(valB.toString()) * direction;
-  });
-
-  buildTable(sorted);
-  updateStats(sorted);
-}
 campusValue = campusValue.trim();
 return text.includes(search)
 

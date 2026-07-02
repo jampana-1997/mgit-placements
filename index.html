@@ -807,14 +807,18 @@ let tr=document.createElement("tr");
 
 /* HEADERS */
 
-headers.forEach(h=>{
+headers.forEach(h => {
 
-let th=document.createElement("th");
+  let th = document.createElement("th");
+  th.innerText = h;
 
-th.innerText=h;
+  th.style.cursor = "pointer";
 
-tr.appendChild(th);
+  th.addEventListener("click", () => {
+    sortTableByColumn(h);
+  });
 
+  tr.appendChild(th);
 });
 
 thead.appendChild(tr);
@@ -1111,7 +1115,29 @@ campusValue = row[key] || "";
 }
 
 });
+function sortTableByColumn(column, dataToSort) {
 
+  sortDirection[column] = !sortDirection[column];
+  let direction = sortDirection[column] ? 1 : -1;
+
+  let sorted = [...dataToSort].sort((a, b) => {
+
+    let valA = a[column] || "";
+    let valB = b[column] || "";
+
+    let numA = parseFloat(valA.toString().replace(/[^\d.]/g, ""));
+    let numB = parseFloat(valB.toString().replace(/[^\d.]/g, ""));
+
+    if (!isNaN(numA) && !isNaN(numB)) {
+      return (numA - numB) * direction;
+    }
+
+    return valA.toString().localeCompare(valB.toString()) * direction;
+  });
+
+  buildTable(sorted);
+  updateStats(sorted);
+}
 campusValue = campusValue.trim();
 return text.includes(search)
 

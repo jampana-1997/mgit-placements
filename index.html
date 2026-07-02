@@ -1077,7 +1077,7 @@ percent+"%";
 
 }
 function sortTableByColumn(column, dataToSort) {
-
+let sortDirection = {};
   sortDirection[column] = !sortDirection[column];
   let direction = sortDirection[column] ? 1 : -1;
 

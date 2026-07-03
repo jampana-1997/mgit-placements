@@ -1076,10 +1076,32 @@ document.getElementById("placementPercent").innerText=
 percent+"%";
 
 }
-function sortTableByColumn(column, dataToSort) {
 let sortDirection = {};
-  sortDirection[column] = !sortDirection[column];
-  let direction = sortDirection[column] ? 1 : -1;
+
+function sortTableByColumn(column, dataToSort) {
+
+    sortDirection[column] = !sortDirection[column];
+
+    let direction = sortDirection[column] ? 1 : -1;
+
+    let sorted = [...dataToSort].sort((a, b) => {
+
+        let valA = (a[column] || "").toString().trim();
+        let valB = (b[column] || "").toString().trim();
+
+        let numA = parseFloat(valA.replace(/[^\d.]/g, ""));
+        let numB = parseFloat(valB.replace(/[^\d.]/g, ""));
+
+        if (!isNaN(numA) && !isNaN(numB)) {
+            return (numA - numB) * direction;
+        }
+
+        return valA.localeCompare(valB) * direction;
+    });
+
+    buildTable(sorted);
+    updateStats(sorted);
+}
 
   let sorted = [...dataToSort].sort((a, b) => {
 

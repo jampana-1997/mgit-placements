@@ -1103,24 +1103,7 @@ function sortTableByColumn(column, dataToSort) {
     updateStats(sorted);
 }
 
-  let sorted = [...dataToSort].sort((a, b) => {
-
-    let valA = a[column] || "";
-    let valB = b[column] || "";
-
-    let numA = parseFloat(valA.toString().replace(/[^\d.]/g, ""));
-    let numB = parseFloat(valB.toString().replace(/[^\d.]/g, ""));
-
-    if (!isNaN(numA) && !isNaN(numB)) {
-      return (numA - numB) * direction;
-    }
-
-    return valA.toString().localeCompare(valB.toString()) * direction;
-  });
-
-  buildTable(sorted);
-  updateStats(sorted);
-}
+ }
 /* FILTER */
 
 function applyFilters(){
